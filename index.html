@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Systemische Therapie Hoyos — Mag. Elisabeth Hoyos</title>
+  <meta name="description" content="Praxis für systemische Psychotherapie in Wien. Mag. Elisabeth Hoyos, Neubaugasse 76/3/21, 1070 Wien. Kassenrefundierung möglich.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <style>
+    :root {
+      --bg1: #FAF8F5;
+      --bg2: #F2EDE6;
+      --bg3: #EAE4DB;
+      --accent: #7A9E7E;
+      --text: #2C2C2A;
+      --text-light: #6b6560;
+      --font-h: 'Playfair Display', Georgia, serif;
+      --font-b: 'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body {
+      font-family: var(--font-b);
+      color: var(--text);
+      background: var(--bg1);
+      overflow-x: hidden;
+      line-height: 1.6;
+      cursor: none;
+    }
+    body.is-mobile { cursor: auto; }
+    img { display: block; width: 100%; object-fit: cover; }
+    a { color: inherit; text-decoration: none; }
+    button { border: none; background: none; font-family: inherit; cursor: none; }
+    body.is-mobile button { cursor: pointer; }
+
+    /* ── Film Grain ── */
+    #grain {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0.032;
+    }
+
+    /* ── Progress ── */
+    #progress {
+      position: fixed; top: 0; left: 0;
+      height: 2px; width: 0%;
+      background: var(--accent);
+      z-index: 9999;
+    }
+
+    /* ── Cursor ── */
+    #cdot, #cring {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9996;
+      transform: translate(-50%, -50%);
+    }
+    #cdot { width: 6px; height: 6px; background: var(--text); }
+    #cring {
+      width: 40px; height: 40px;
+      border: 1.5px solid var(--text);
+      opacity: 0.45;
+      transition: width 0.25s, height 0.25s, opacity 0.25s, border-color 0.25s;
+    }
+    #cring.hov { width: 60px; height: 60px; opacity: 0.85; border-color: var(--accent); }
+    body.is-mobile #cdot, body.is-mobile #cring { display: none; }
+
+    /* ── Intro ── */
+    #intro {
+      position: fixed; inset: 0;
+      background: var(--bg1);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9995;
+      transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.5s ease;
+    }
+    #intro.gone { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+    #intro-logo {
+      font-family: var(--font-h);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.6s ease 0.25s, transform 0.6s ease 0.25s;
+    }
+    #intro-logo.show { opacity: 1; transform: translateY(0); }
+
+    /* ── Nav ── */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 9990;
+      padding: 1.2rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
+    }
+    #nav.scrolled {
+      background: rgba(250,248,245,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(44,44,42,0.08);
+    }
+    .nav-logo {
+      font-family: var(--font-h);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      transition: opacity 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 0;
+      height: 1px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .nav-links a.active, .nav-links a:hover { opacity: 1; }
+    .nav-links a.active::after, .nav-links a:hover::after { transform: scaleX(1); }
+
+    #hamburger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      width: 28px; justify-content: center;
+      cursor: pointer; z-index: 9993;
+    }
+    #hamburger span {
+      display: block; height: 1.5px; background: var(--text);
+      transition: transform 0.4s, opacity 0.4s;
+      transform-origin: center;
+    }
+    #hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    #hamburger.open span:nth-child(2) { opacity: 0; }
+    #hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ── Mobile Menu ── */
+    #mmenu {
+      position: fixed; inset: 0;
+      background: var(--bg1);
+      z-index: 9991;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2.2rem;
+      transform: translateX(100%);
+      transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+    #mmenu.open { transform: translateX(0); }
+    #mmenu a { font-family: var(--font-h); font-size: 2.2rem; font-weight: 600; }
+
+    /* ── Hero ── */
+    #hero {
+      position: relative;
+      height: 100vh; min-height: 600px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      will-change: transform;
+    }
+    .hero-bg img { width: 100%; height: 115%; object-position: center; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(250,248,245,0.5) 0%, rgba(250,248,245,0.1) 50%, rgba(250,248,245,0.72) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 0 2rem;
+      max-width: 920px;
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.8s ease 2.1s, transform 0.8s ease 2.1s;
+    }
+    .hero-eyebrow.show { opacity: 1; transform: translateY(0); }
+    .hero-h1 {
+      font-family: var(--font-h);
+      font-size: clamp(3rem, 7.5vw, 5.8rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 1.6rem;
+    }
+    .split-line { display: block; overflow: hidden; }
+    .sc {
+      display: inline-block;
+      transform: translateY(120%);
+      opacity: 0;
+      transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+    }
+    .sc.on { transform: translateY(0); opacity: 1; }
+    .hero-sub {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      line-height: 1.75;
+      color: var(--text-light);
+      max-width: 580px;
+      margin: 0 auto 2.5rem;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.8s ease 2.5s, transform 0.8s ease 2.5s;
+    }
+    .hero-sub.show { opacity: 1; transform: translateY(0); }
+    .cta-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--text);
+      color: var(--bg1);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transform: scale(0.8);
+      opacity: 0.6;
+    }
+    .cta-btn:hover { background: var(--accent); }
+
+    /* ── Marquee ── */
+    #marquee { background: var(--bg2); padding: 1rem 0; overflow: hidden; }
+    .mq-row { display: flex; white-space: nowrap; overflow: hidden; padding: 0.4rem 0; }
+    .mq-row:hover .mq-track { animation-play-state: paused; }
+    .mq-track {
+      display: flex;
+      animation: mq-ltr 32s linear infinite;
+      will-change: transform;
+    }
+    .mq-row.rtl .mq-track { animation: mq-rtl 32s linear infinite; }
+    .mq-item {
+      display: inline-flex; align-items: center; gap: 1rem;
+      padding: 0 1.2rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.65;
+      flex-shrink: 0;
+    }
+    .mq-item::after { content: '·'; color: var(--accent); font-size: 1.1rem; margin-left: 1rem; }
+    @keyframes mq-ltr { from { transform: translateX(0); } to { transform: translateX(-33.333%); } }
+    @keyframes mq-rtl { from { transform: translateX(-33.333%); } to { transform: translateX(0); } }
+
+    /* ── Story / Über mich ── */
+    #ueber-mich { height: 400vh; position: relative; }
+    .story-sticky {
+      position: sticky; top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .story-img-col { position: relative; overflow: hidden; }
+    .story-img-col img { height: 100%; object-position: center top; will-change: transform; }
+    .story-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, transparent 60%, var(--bg1) 100%);
+    }
+    .story-text-col {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 5rem 5rem 5rem 4rem;
+      background: var(--bg1);
+      position: relative;
+    }
+    .sph {
+      position: absolute;
+      top: 50%; transform: translateY(-50%) translateY(28px);
+      left: 4rem; right: 4rem;
+      opacity: 0;
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .sph.on { opacity: 1; transform: translateY(-50%) translateY(0); }
+    .sph-tag {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .sph h2 {
+      font-family: var(--font-h);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .sph p { font-size: 0.97rem; line-height: 1.78; color: var(--text-light); max-width: 440px; }
+    .story-dots {
+      position: absolute; right: 2rem; top: 50%;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 0.8rem;
+    }
+    .story-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--text); opacity: 0.18;
+      transition: opacity 0.3s, transform 0.3s, background 0.3s;
+    }
+    .story-dot.on { opacity: 1; transform: scale(1.6); background: var(--accent); }
+
+    /* ── Stats ── */
+    #stats { background: var(--bg2); padding: 6rem 2.5rem; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .stat-card {
+      background: var(--bg1);
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.3s;
+    }
+    .stat-card:hover { box-shadow: 0 8px 32px rgba(44,44,42,0.08); }
+    .stat-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 0.3s;
+      background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(122,158,126,0.1), transparent 70%);
+    }
+    .stat-card:hover::after { opacity: 1; }
+    .stat-num {
+      font-family: var(--font-h);
+      font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.6rem;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+
+    /* ── Leistungen ── */
+    #leistungen { padding: 7rem 2.5rem; background: var(--bg1); }
+    .leistungen-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: start;
+    }
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.9rem;
+    }
+    .section-h2 {
+      font-family: var(--font-h);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 2.5rem;
+    }
+    .acc-item { border-top: 1px solid rgba(44,44,42,0.1); }
+    .acc-item:last-child { border-bottom: 1px solid rgba(44,44,42,0.1); }
+    .acc-trigger {
+      width: 100%; text-align: left;
+      padding: 1.3rem 0;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 0.97rem; font-weight: 500;
+      cursor: pointer;
+      color: var(--text);
+      transition: color 0.3s;
+      background: none; border: none; font-family: inherit;
+    }
+    .acc-item.open .acc-trigger { color: var(--accent); }
+    .acc-arrow {
+      width: 20px; height: 20px;
+      border: 1.5px solid currentColor;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem; line-height: 1;
+      transition: transform 0.4s;
+    }
+    .acc-item.open .acc-arrow { transform: rotate(45deg); }
+    .acc-body { max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1); }
+    .acc-body-inner {
+      padding: 0 0 1.4rem;
+      color: var(--text-light);
+      font-size: 0.92rem;
+      line-height: 1.72;
+    }
+    .acc-price {
+      display: inline-block;
+      margin-top: 0.8rem;
+      padding: 0.3rem 0.9rem;
+      background: var(--bg2);
+      border-radius: 2px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .leistungen-img {
+      position: sticky; top: 5rem;
+      border-radius: 4px; overflow: hidden;
+      height: 520px;
+    }
+    .leistungen-img img { height: 100%; }
+
+    /* Clip reveal */
+    .clip-reveal {
+      clip-path: inset(100% 0 0 0);
+      transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .clip-reveal.on { clip-path: inset(0%); }
+
+    /* ── Horizontal Reel ── */
+    #reel { height: 600vh; position: relative; }
+    .reel-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+    .reel-track { display: flex; height: 100%; will-change: transform; }
+    .reel-panel {
+      flex: 0 0 100vw; width: 100vw; height: 100vh;
+      position: relative; overflow: hidden;
+    }
+    .reel-panel img { width: 100%; height: 100%; object-position: center; }
+    .reel-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(30,28,26,0.7) 0%, rgba(30,28,26,0.08) 55%, transparent 100%);
+    }
+    .reel-content {
+      position: absolute; bottom: 4rem; left: 5rem;
+      max-width: 520px; color: #fff;
+    }
+    .reel-num {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      opacity: 0.55; margin-bottom: 0.8rem;
+    }
+    .reel-h {
+      font-family: var(--font-h);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .reel-p { font-size: 0.95rem; line-height: 1.65; opacity: 0.85; max-width: 400px; }
+    .reel-dots {
+      position: absolute; bottom: 2rem; right: 3rem;
+      display: flex; gap: 0.5rem;
+    }
+    .rdot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transition: background 0.3s, transform 0.3s;
+    }
+    .rdot.on { background: #fff; transform: scale(1.5); }
+
+    /* ── Scroll Text Highlight ── */
+    #highlight {
+      padding: 8rem 2.5rem;
+      background: var(--bg2);
+      display: flex; align-items: center;
+      min-height: 70vh;
+    }
+    .highlight-inner { max-width: 900px; margin: 0 auto; }
+    .highlight-label {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 2rem;
+    }
+    #highlightText {
+      font-family: var(--font-h);
+      font-size: clamp(1.4rem, 3.2vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.55;
+    }
+    .hw { opacity: 0.18; transition: opacity 0.35s ease; }
+    .hw.on { opacity: 1; }
+
+    /* ── Methode ── */
+    #methode { padding: 7rem 2.5rem; background: var(--bg1); }
+    .methode-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+    .methode-img { border-radius: 4px; overflow: hidden; height: 500px; }
+    .methode-img img { height: 100%; }
+    .methode-text p {
+      font-size: 0.95rem; line-height: 1.78;
+      color: var(--text-light); margin-bottom: 1.5rem;
+    }
+    .usp-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .usp-list li { display: flex; align-items: center; gap: 0.7rem; font-size: 0.88rem; font-weight: 500; }
+    .usp-list li::before {
+      content: '';
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
+    }
+
+    /* ── Quote ── */
+    #quote {
+      position: relative;
+      height: 56vh; min-height: 380px;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .quote-bg { position: absolute; inset: 0; will-change: transform; }
+    .quote-bg img { width: 100%; height: 120%; object-position: center; }
+    .quote-overlay {
+      position: absolute; inset: 0;
+      background: rgba(250,248,245,0.78);
+    }
+    .quote-content {
+      position: relative; z-index: 1;
+      text-align: center; padding: 0 2rem;
+      max-width: 680px;
+    }
+    .quote-mark {
+      font-family: var(--font-h);
+      font-size: 7rem; color: var(--accent);
+      opacity: 0.18; line-height: 0.6;
+      margin-bottom: 1rem;
+    }
+    .quote-text {
+      font-family: var(--font-h);
+      font-size: clamp(1.3rem, 2.8vw, 2rem);
+      font-weight: 400; font-style: italic;
+      line-height: 1.5; color: var(--text);
+      margin-bottom: 1.2rem;
+    }
+    .quote-source {
+      font-size: 0.8rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-light);
+    }
+
+    /* ── Ablauf ── */
+    #ablauf { padding: 7rem 2.5rem; background: var(--bg3); }
+    .ablauf-inner { max-width: 1000px; margin: 0 auto; }
+    .ablauf-inner .section-h2 { margin-bottom: 3rem; }
+    .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 3rem; }
+    .step {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .step.on { opacity: 1; transform: translateY(0); }
+    .step-num {
+      font-family: var(--font-h);
+      font-size: 3rem; font-weight: 700;
+      color: var(--accent); opacity: 0.28;
+      line-height: 1; margin-bottom: 1rem;
+    }
+    .step h3 { font-family: var(--font-h); font-size: 1.2rem; font-weight: 600; margin-bottom: 0.7rem; }
+    .step p { font-size: 0.92rem; line-height: 1.72; color: var(--text-light); }
+
+    /* ── Kontakt ── */
+    #kontakt { padding: 7rem 2.5rem; background: var(--bg1); }
+    .kontakt-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: start;
+    }
+    .kontakt-info .section-h2 { margin-bottom: 1.4rem; }
+    .kontakt-info > p {
+      font-size: 0.95rem; line-height: 1.78;
+      color: var(--text-light); margin-bottom: 2rem;
+    }
+    .kontakt-details { list-style: none; display: flex; flex-direction: column; gap: 0.9rem; }
+    .kontakt-details li { display: flex; align-items: center; gap: 0.9rem; font-size: 0.9rem; }
+    .kontakt-details a:hover { color: var(--accent); }
+    .kd-icon {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--bg2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem; flex-shrink: 0;
+    }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-light); margin-bottom: 0.45rem;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border: 1px solid rgba(44,44,42,0.14);
+      border-radius: 2px;
+      background: var(--bg2);
+      font-family: inherit; font-size: 0.93rem;
+      color: var(--text); outline: none;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--accent); background: var(--bg1);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .submit-btn {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: var(--text);
+      color: var(--bg1);
+      font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      border-radius: 2px; cursor: pointer;
+      transition: background 0.3s;
+      font-family: inherit; border: none;
+    }
+    .submit-btn:hover { background: var(--accent); }
+    body.is-mobile .submit-btn { cursor: pointer; }
+
+    /* ── Maps ── */
+    #maps { position: relative; height: 440px; }
+    #maps iframe { width: 100%; height: 100%; border: 0; filter: saturate(0.55) sepia(0.15); }
+    .maps-card {
+      position: absolute; top: 50%; left: 5rem;
+      transform: translateY(-50%);
+      background: var(--bg1);
+      padding: 2rem 2.5rem;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(44,44,42,0.12);
+      min-width: 260px;
+    }
+    .maps-card h3 { font-family: var(--font-h); font-size: 1.15rem; margin-bottom: 0.7rem; }
+    .maps-card p { font-size: 0.87rem; line-height: 1.62; color: var(--text-light); }
+
+    /* ── Krisenlinks ── */
+    #krisenlinks { padding: 3.5rem 2.5rem; background: var(--bg2); }
+    .krisenlinks-inner { max-width: 900px; margin: 0 auto; }
+    .krisenlinks-inner h3 {
+      font-family: var(--font-h);
+      font-size: 1rem; font-weight: 600;
+      color: var(--text-light); margin-bottom: 1.4rem;
+    }
+    .klinks { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px,1fr)); gap: 0.5rem; }
+    .klink {
+      display: flex; align-items: center; gap: 0.8rem;
+      padding: 0.7rem 1rem;
+      background: var(--bg1); border-radius: 2px;
+      font-size: 0.83rem; font-weight: 500;
+      color: var(--text);
+      transition: color 0.25s, transform 0.25s;
+    }
+    .klink:hover { color: var(--accent); transform: translateX(4px); }
+    .klink::before {
+      content: '';
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
+    }
+
+    /* ── Footer ── */
+    #footer { background: var(--text); color: var(--bg2); padding: 4rem 2.5rem 2rem; }
+    .footer-top {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 3rem; margin-bottom: 3rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid rgba(250,248,245,0.1);
+    }
+    .footer-logo {
+      font-family: var(--font-h);
+      font-size: 1.05rem; font-weight: 600;
+      letter-spacing: 0.06em; color: var(--bg1);
+      margin-bottom: 0.7rem;
+    }
+    .footer-tagline { font-size: 0.8rem; opacity: 0.45; line-height: 1.55; }
+    .footer-col h4 {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      opacity: 0.45; margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .footer-col ul li a { font-size: 0.85rem; opacity: 0.65; transition: opacity 0.3s; }
+    .footer-col ul li a:hover { opacity: 1; }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-copy { font-size: 0.76rem; opacity: 0.35; }
+    .footer-legal { display: flex; gap: 1.5rem; }
+    .footer-legal button {
+      font-size: 0.76rem; opacity: 0.5;
+      color: var(--bg2);
+      text-decoration: underline; text-underline-offset: 3px;
+      cursor: pointer; transition: opacity 0.3s;
+      font-family: inherit; background: none; border: none;
+    }
+    .footer-legal button:hover { opacity: 1; }
+    body.is-mobile .footer-legal button { cursor: pointer; }
+
+    /* ── Modals ── */
+    .modal-bg {
+      position: fixed; inset: 0;
+      background: rgba(44,44,42,0.52);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 9980;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s;
+    }
+    .modal-bg.open { opacity: 1; pointer-events: all; }
+    .modal {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.94);
+      width: min(680px, 92vw);
+      max-height: 80vh; overflow-y: auto;
+      background: var(--bg1);
+      border-radius: 4px; padding: 3rem;
+      z-index: 9981;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s, transform 0.4s;
+      scrollbar-width: thin;
+    }
+    .modal.open { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
+    .modal h2 { font-family: var(--font-h); font-size: 1.6rem; margin-bottom: 1.5rem; }
+    .modal p { font-size: 0.9rem; line-height: 1.78; color: var(--text-light); margin-bottom: 1rem; }
+    .modal strong { color: var(--text); }
+    .modal-x {
+      position: absolute; top: 1.4rem; right: 1.4rem;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--bg2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: pointer;
+      transition: background 0.3s;
+      border: none; color: var(--text); font-family: inherit;
+    }
+    .modal-x:hover { background: var(--bg3); }
+    body.is-mobile .modal-x { cursor: pointer; }
+
+    /* ── Cookie ── */
+    #cookie {
+      position: fixed; bottom: 1.5rem; left: 50%;
+      transform: translateX(-50%) translateY(130%);
+      width: min(580px, 92vw);
+      background: var(--text); color: var(--bg1);
+      border-radius: 4px; padding: 1.4rem 1.8rem;
+      z-index: 9985;
+      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+      box-shadow: 0 8px 40px rgba(44,44,42,0.22);
+    }
+    #cookie.show { transform: translateX(-50%) translateY(0); }
+    #cookie p { font-size: 0.83rem; opacity: 0.78; line-height: 1.5; }
+    .cookie-ok {
+      flex-shrink: 0;
+      padding: 0.55rem 1.4rem;
+      background: var(--accent); color: #fff;
+      border-radius: 2px;
+      font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; transition: opacity 0.3s;
+      border: none; font-family: inherit; white-space: nowrap;
+    }
+    .cookie-ok:hover { opacity: 0.84; }
+    body.is-mobile .cookie-ok { cursor: pointer; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .leistungen-inner, .methode-inner, .kontakt-inner { grid-template-columns: 1fr; }
+      .leistungen-img { position: static; height: 320px; }
+      .story-sticky { grid-template-columns: 1fr; }
+      .story-img-col { display: none; }
+      .story-text-col { padding: 5rem 2.5rem; }
+      .sph { left: 2.5rem; right: 2.5rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      #hamburger { display: flex; }
+      .reel-content { left: 2rem; right: 2rem; bottom: 2rem; }
+      .steps { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      #maps { height: 300px; }
+      .maps-card { left: 1rem; right: 1rem; top: auto; bottom: -90px; transform: none; position: relative; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .klinks { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Film Grain -->
+<svg id="grain" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <filter id="fnoise">
+    <feTurbulence id="turb" type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#fnoise)"/>
+</svg>
+
+<!-- Progress Bar -->
+<div id="progress"></div>
+
+<!-- Custom Cursor -->
+<div id="cdot"></div>
+<div id="cring"></div>
+
+<!-- Page Intro -->
+<div id="intro">
+  <div id="intro-logo">Therapie Hoyos</div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">Therapie Hoyos</a>
+  <ul class="nav-links">
+    <li><a href="#ueber-mich">Über mich</a></li>
+    <li><a href="#leistungen">Leistungen</a></li>
+    <li><a href="#methode">Methode</a></li>
+    <li><a href="#ablauf">Ablauf</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <div id="hamburger" role="button" tabindex="0" aria-label="Menü">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mmenu">
+  <a href="#ueber-mich">Über mich</a>
+  <a href="#leistungen">Leistungen</a>
+  <a href="#methode">Methode</a>
+  <a href="#ablauf">Ablauf</a>
+  <a href="#kontakt">Kontakt</a>
+</div>
+
+<!-- HERO -->
+<section id="hero" data-bg="#FAF8F5">
+  <div class="hero-bg" id="heroBg">
+    <img src="http://www.therapiehoyos.at/wp-content/uploads/2019/03/20190311-IMG_9577.jpg" alt="Therapiepraxis Hoyos Wien" loading="eager" decoding="async">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Mag. Elisabeth Hoyos · 1070 Wien</p>
+    <h1 class="hero-h1">
+      <span class="split-line" data-text="Praxis für"></span>
+      <span class="split-line" data-text="Psychotherapie"></span>
+    </h1>
+    <p class="hero-sub">Psychotherapie unterstützt Sie, wenn Sie den Wunsch haben, etwas zu verändern, und sich mit Ihren Gefühlen und Ihrem Erleben zu beschäftigen.</p>
+    <a href="#kontakt" class="cta-btn magnetic">Erstgespräch vereinbaren</a>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div id="marquee" data-bg="#F2EDE6">
+  <div class="mq-row">
+    <div class="mq-track">
+      <span class="mq-item">Systemische Therapie</span><span class="mq-item">Ressourcen aktivieren</span><span class="mq-item">Neue Perspektiven</span><span class="mq-item">Wertschätzung</span><span class="mq-item">Vertrauen</span><span class="mq-item">Selbstbestimmung</span><span class="mq-item">Veränderung ermöglichen</span><span class="mq-item">Geschützter Rahmen</span><span class="mq-item">Systemische Therapie</span><span class="mq-item">Ressourcen aktivieren</span><span class="mq-item">Neue Perspektiven</span><span class="mq-item">Wertschätzung</span><span class="mq-item">Vertrauen</span><span class="mq-item">Selbstbestimmung</span><span class="mq-item">Veränderung ermöglichen</span><span class="mq-item">Geschützter Rahmen</span><span class="mq-item">Systemische Therapie</span><span class="mq-item">Ressourcen aktivieren</span><span class="mq-item">Neue Perspektiven</span><span class="mq-item">Wertschätzung</span><span class="mq-item">Vertrauen</span><span class="mq-item">Selbstbestimmung</span><span class="mq-item">Veränderung ermöglichen</span><span class="mq-item">Geschützter Rahmen</span>
+    </div>
+  </div>
+  <div class="mq-row rtl">
+    <div class="mq-track">
+      <span class="mq-item">1070 Wien</span><span class="mq-item">Neubaugasse</span><span class="mq-item">Online &amp; Präsenz</span><span class="mq-item">Kassenrefundierung</span><span class="mq-item">Einzelpersonen &amp; Paare</span><span class="mq-item">Brainspotting</span><span class="mq-item">Kurztherapie &amp; Langzeitbegleitung</span><span class="mq-item">Mag. Elisabeth Hoyos</span><span class="mq-item">1070 Wien</span><span class="mq-item">Neubaugasse</span><span class="mq-item">Online &amp; Präsenz</span><span class="mq-item">Kassenrefundierung</span><span class="mq-item">Einzelpersonen &amp; Paare</span><span class="mq-item">Brainspotting</span><span class="mq-item">Kurztherapie &amp; Langzeitbegleitung</span><span class="mq-item">Mag. Elisabeth Hoyos</span><span class="mq-item">1070 Wien</span><span class="mq-item">Neubaugasse</span><span class="mq-item">Online &amp; Präsenz</span><span class="mq-item">Kassenrefundierung</span><span class="mq-item">Einzelpersonen &amp; Paare</span><span class="mq-item">Brainspotting</span><span class="mq-item">Kurztherapie &amp; Langzeitbegleitung</span><span class="mq-item">Mag. Elisabeth Hoyos</span>
+    </div>
+  </div>
+</div>
+
+<!-- STORY / ÜBER MICH -->
+<section id="ueber-mich" data-bg="#FAF8F5">
+  <div class="story-sticky">
+    <div class="story-img-col">
+      <img src="http://www.therapiehoyos.at/wp-content/uploads/2019/03/20190311-IMG_9536.jpg" alt="Mag. Elisabeth Hoyos" loading="lazy" decoding="async">
+      <div class="story-img-overlay"></div>
+    </div>
+    <div class="story-text-col">
+      <div class="sph" data-phase="0">
+        <p class="sph-tag">Über mich</p>
+        <h2>Wer ich bin</h2>
+        <p>Meine therapeutische Haltung ist geprägt von Wertschätzung, Interesse und Unvoreingenommenheit. Ich biete systemische Psychotherapie für Einzelpersonen und im Anlassfall auch für Paare oder Familien an.</p>
+      </div>
+      <div class="sph" data-phase="1">
+        <p class="sph-tag">Ausbildung</p>
+        <h2>Fundiertes Wissen</h2>
+        <p>Mag. phil. Pädagogik / Sonder- und Heilpädagogik (Universität Wien) · Systemische Familientherapeutin (ÖAS Wien) · Weiterbildung Brainspotting Traumatherapie.</p>
+      </div>
+      <div class="sph" data-phase="2">
+        <p class="sph-tag">Erfahrung</p>
+        <h2>15+ Jahre Praxis</h2>
+        <p>Tätigkeiten u. a. an der Sigmund Freud Universität, im Otto-Wagner-Spital (Akutpsychiatrie) sowie in mehreren Wiener Beratungsinstitutionen — breite klinische Erfahrung.</p>
+      </div>
+      <div class="sph" data-phase="3">
+        <p class="sph-tag">Meine Haltung</p>
+        <h2>Ressourcen sichtbar machen</h2>
+        <p>In der systemischen Therapie richtet sich der Fokus auf das Sichtbarmachen und die Förderung der eigenen Fähigkeiten und Ressourcen, die in schwierigen Zeiten oft nicht gesehen werden können.</p>
+      </div>
+      <div class="story-dots">
+        <div class="story-dot on"></div>
+        <div class="story-dot"></div>
+        <div class="story-dot"></div>
+        <div class="story-dot"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats" data-bg="#F2EDE6">
+  <div class="stats-grid">
+    <div class="stat-card tilt-card">
+      <div class="stat-num" data-target="15" data-suffix="+">0</div>
+      <div class="stat-label">Jahre Erfahrung</div>
+    </div>
+    <div class="stat-card tilt-card">
+      <div class="stat-num" data-target="7" data-suffix="">0</div>
+      <div class="stat-label">Ausbildungsstationen</div>
+    </div>
+    <div class="stat-card tilt-card">
+      <div class="stat-num" data-target="50" data-suffix="">0</div>
+      <div class="stat-label">Minuten geschützter Raum</div>
+    </div>
+    <div class="stat-card tilt-card">
+      <div class="stat-num" data-target="100" data-suffix="%">0</div>
+      <div class="stat-label">Verschwiegenheit</div>
+    </div>
+  </div>
+</section>
+
+<!-- LEISTUNGEN -->
+<section id="leistungen" data-bg="#FAF8F5">
+  <div class="leistungen-inner">
+    <div>
+      <p class="section-label">Leistungen &amp; Preise</p>
+      <h2 class="section-h2">Was ich anbiete</h2>
+      <div class="acc-list">
+        <div class="acc-item">
+          <button class="acc-trigger">Psychotherapie <span class="acc-arrow">+</span></button>
+          <div class="acc-body"><div class="acc-body-inner">Systemische Einzeltherapie, kurz- oder langfristige Begleitung. Kassenrefundierung möglich: ÖGK (−33,70 €) · BVAEB (−46,60 €) · SVS (−45,00 €) pro Einheit.<br><span class="acc-price">50 Min: 110 € · 90 Min: 190 €</span></div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">Erstgespräch <span class="acc-arrow">+</span></button>
+          <div class="acc-body"><div class="acc-body-inner">Unverbindliches Kennenlernen, Klärung des weiteren Vorgehens, Therapierahmenbedingungen und Kosten.<br><span class="acc-price">50 Min: 80 €</span></div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">Selbsterfahrung <span class="acc-arrow">+</span></button>
+          <div class="acc-body"><div class="acc-body-inner">Psychotherapeutisches Propädeutikum sowie Selbsterfahrung im Zuge der Ausbildung für Lebens- und Sozialberater bzw. klinische Gesundheitspsychologen.<br><span class="acc-price">50 Min: 100 €</span></div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">Digitale Praxis <span class="acc-arrow">+</span></button>
+          <div class="acc-body"><div class="acc-body-inner">Psychotherapie via Skype, Telefon und FaceTime — vollwertig und kassenrefundierbar wie Präsenztermine.<br><span class="acc-price">Gleiche Honorare wie Präsenz</span></div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">Paare &amp; Familien <span class="acc-arrow">+</span></button>
+          <div class="acc-body"><div class="acc-body-inner">Im Anlassfall biete ich systemische Therapie auch für Paare oder Familien an.<br><span class="acc-price">Auf Anfrage</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="leistungen-img clip-reveal">
+      <img src="http://www.therapiehoyos.at/wp-content/uploads/2019/03/20190311-IMG_9577.jpg" alt="Therapiepraxis Wien" loading="lazy" decoding="async">
+    </div>
+  </div>
+</section>
+
+<!-- HORIZONTAL SCROLL REEL -->
+<section id="reel" data-bg="#EAE4DB">
+  <div class="reel-sticky">
+    <div class="reel-track" id="reelTrack">
+      <div class="reel-panel">
+        <img src="http://www.therapiehoyos.at/wp-content/uploads/2019/03/20190311-IMG_9536.jpg" alt="Wer ich bin" loading="lazy" decoding="async">
+        <div class="reel-overlay"></div>
+        <div class="reel-content">
+          <p class="reel-num">01 / 05</p>
+          <h3 class="reel-h">Wer ich bin</h3>
+          <p class="reel-p">Mag. Elisabeth Hoyos — Systemische Familientherapeutin, ausgebildet an der ÖAS Wien. Meine Haltung ist geprägt von Wertschätzung, Interesse und Unvoreingenommenheit.</p>
+        </div>
+      </div>
+      <div class="reel-panel">
+        <img src="http://www.therapiehoyos.at/wp-content/uploads/2020/09/20200908-IMG_1338.jpg" alt="Die Methode" loading="lazy" decoding="async">
+        <div class="reel-overlay"></div>
+        <div class="reel-content">
+          <p class="reel-num">02 / 05</p>
+          <h3 class="reel-h">Die Methode</h3>
+          <p class="reel-p">Systemische Therapie sieht den Menschen im Kontext seiner Beziehungen und Erfahrungen. Ressourcen werden sichtbar gemacht, neue Perspektiven entstehen.</p>
+        </div>
+      </div>
+      <div class="reel-panel">
+        <img src="http://www.therapiehoyos.at/wp-content/uploads/2019/03/20190311-IMG_9577.jpg" alt="Das Angebot" loading="lazy" decoding="async">
+        <div class="reel-overlay"></div>
+        <div class="reel-content">
+          <p class="reel-num">03 / 05</p>
+          <h3 class="reel-h">Das Angebot</h3>
+          <p class="reel-p">Psychotherapie für Einzelpersonen, Paare und Familien — in der Praxis oder digital via Skype, Telefon und FaceTime. Kassenrefundierung möglich.</p>
+        </div>
+      </div>
+      <div class="reel-panel">
+        <img src="http://www.therapiehoyos.at/wp-content/uploads/2020/09/20200908-IMG_1332-1.jpg" alt="Der Raum" loading="lazy" decoding="async">
+        <div class="reel-overlay"></div>
+        <div class="reel-content">
+          <p class="reel-num">04 / 05</p>
+          <h3 class="reel-h">Der Raum</h3>
+          <p class="reel-p">Ein vertraulicher, sicherer Ort in der Neubaugasse 76, 1070 Wien — wo Entwicklung und Veränderung wachsen können.</p>
+        </div>
+      </div>
+      <div class="reel-panel">
+        <img src="http://www.therapiehoyos.at/wp-content/uploads/2019/03/20190311-IMG_9577.jpg" alt="Der erste Schritt" loading="lazy" decoding="async">
+        <div class="reel-overlay"></div>
+        <div class="reel-content">
+          <p class="reel-num">05 / 05</p>
+          <h3 class="reel-h">Der erste Schritt</h3>
+          <p class="reel-p">Ein unverbindliches Erstgespräch reicht. Rufen Sie an oder schreiben Sie — alles Weitere klären wir gemeinsam.</p>
+        </div>
+      </div>
+    </div>
+    <div class="reel-dots" id="reelDots">
+      <div class="rdot on"></div>
+      <div class="rdot"></div>
+      <div class="rdot"></div>
+      <div class="rdot"></div>
+      <div class="rdot"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCROLL TEXT HIGHLIGHT -->
+<section id="highlight" data-bg="#F2EDE6">
+  <div class="highlight-inner">
+    <p class="highlight-label">Mission</p>
+    <p id="highlightText">In der systemischen Therapie richtet sich der Fokus auf das Sichtbarmachen und die Förderung der eigenen Fähigkeiten und Ressourcen, die in schwierigen Zeiten oft nicht gesehen werden können. Andere Perspektiven werden gewonnen, ebenso findet die aktuelle Lebenssituation mit ihren individuellen Erfahrungen, Erlebnissen und Beziehungen Beachtung.</p>
+  </div>
+</section>
+
+<!-- METHODE -->
+<section id="methode" data-bg="#FAF8F5">
+  <div class="methode-inner">
+    <div class="methode-img clip-reveal">
+      <img src="http://www.therapiehoyos.at/wp-content/uploads/2020/09/20200908-IMG_1338.jpg" alt="Beratungsraum" loading="lazy" decoding="async">
+    </div>
+    <div class="methode-text">
+      <p class="section-label">Systemische Therapie</p>
+      <h2 class="section-h2">Die Methode</h2>
+      <p>Psychotherapie ist ein eigenständiges, gesetzlich anerkanntes Heilverfahren. In der systemischen Therapie werden gemeinsam mit Klientinnen und Klienten Lösungen erarbeitet — in einem geschützten Rahmen, der Vertrauen, Entwicklung, Selbstbestimmung und Veränderung ermöglicht.</p>
+      <p>Methoden: vielfältige Fragetechniken, selbstreflexiver Dialog, Reflecting Teams, visualisierende Techniken (Aufstellungen), Hausaufgaben.</p>
+      <ul class="usp-list">
+        <li>Ressourcen &amp; Stärken aktivieren</li>
+        <li>Neue Perspektiven gewinnen</li>
+        <li>Handlungsspielraum erweitern</li>
+        <li>Kassenrefundierung möglich</li>
+        <li>Online-Therapie verfügbar</li>
+        <li>Absolute Verschwiegenheitspflicht</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section id="quote" data-bg="#EAE4DB">
+  <div class="quote-bg" id="quoteBg">
+    <img src="http://www.therapiehoyos.at/wp-content/uploads/2020/09/20200908-IMG_1332-1.jpg" alt="Praxisraum" loading="lazy" decoding="async">
+  </div>
+  <div class="quote-overlay"></div>
+  <div class="quote-content">
+    <div class="quote-mark">"</div>
+    <p class="quote-text">Du kannst den Wind nicht ändern, aber die Segel anders setzen.</p>
+    <p class="quote-source">— Aristoteles</p>
+  </div>
+</section>
+
+<!-- ABLAUF -->
+<section id="ablauf" data-bg="#EAE4DB">
+  <div class="ablauf-inner">
+    <p class="section-label">Der Weg</p>
+    <h2 class="section-h2">So geht es los</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Terminvereinbarung</h3>
+        <p>Unverbindliches Erstgespräch per Telefon (+43 664 545 2637) oder E-Mail vereinbaren.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Erstgespräch</h3>
+        <p>Gegenseitiges Kennenlernen, Klärung des Vorgehens, der Therapiefrequenz, Absageregelung und Kosten.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Therapieprozess</h3>
+        <p>Regelmäßige Einheiten (alle 1–2 Wochen), angepasst an Ihre individuellen Bedürfnisse, in absolutem Vertrauen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt" data-bg="#FAF8F5">
+  <div class="kontakt-inner">
+    <div class="kontakt-info">
+      <p class="section-label">Kontakt</p>
+      <h2 class="section-h2">Jetzt Termin vereinbaren</h2>
+      <p>Ich freue mich auf Ihre Kontaktaufnahme. Ein unverbindliches Erstgespräch hilft uns beiden, herauszufinden, ob eine Zusammenarbeit für Sie passend ist.</p>
+      <ul class="kontakt-details">
+        <li><span class="kd-icon">☎</span><a href="tel:+436645452637">+43 664 545 2637</a></li>
+        <li><span class="kd-icon">✉</span><a href="mailto:kontakt@therapiehoyos.at">kontakt@therapiehoyos.at</a></li>
+        <li><span class="kd-icon">⊙</span>Neubaugasse 76/3/21, 1070 Wien</li>
+        <li><span class="kd-icon">◷</span>Nach Vereinbarung</li>
+      </ul>
+    </div>
+    <div class="kontakt-form">
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="fname">Name</label>
+          <input type="text" id="fname" name="name" placeholder="Ihr Name" required>
+        </div>
+        <div class="form-group">
+          <label for="femail">E-Mail</label>
+          <input type="email" id="femail" name="email" placeholder="ihre@email.at" required>
+        </div>
+        <div class="form-group">
+          <label for="fmsg">Nachricht</label>
+          <textarea id="fmsg" name="message" placeholder="Ich interessiere mich für…" required></textarea>
+        </div>
+        <button type="submit" class="submit-btn magnetic">Nachricht senden</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- MAPS -->
+<div id="maps">
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2659.0553387984977!2d16.346963015640898!3d48.20226597922867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476d079e80a36bed%3A0x8d7ef0bd55b5d54!2sNeubaugasse%2076%2C%201070%20Wien!5e0!3m2!1sde!2sat!4v1700000000000" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Standort Therapie Hoyos"></iframe>
+  <div class="maps-card">
+    <h3>Therapie Hoyos</h3>
+    <p>Neubaugasse 76/3/21<br>1070 Wien<br><br><a href="tel:+436645452637" style="color:var(--accent)">+43 664 545 2637</a></p>
+  </div>
+</div>
+
+<!-- KRISENLINKS -->
+<div id="krisenlinks">
+  <div class="krisenlinks-inner">
+    <h3>Krisenunterstützung &amp; Notfallkontakte</h3>
+    <div class="klinks">
+      <a href="http://www.telefonseelsorge.at/" class="klink" target="_blank" rel="noopener">Telefonseelsorge (0–24 Uhr)</a>
+      <a href="http://www.kriseninterventionszentrum.at/" class="klink" target="_blank" rel="noopener">Kriseninterventionszentrum Wien — 406 95 95</a>
+      <a href="http://www.psd-wien.at/" class="klink" target="_blank" rel="noopener">Psychosozialer Dienst Wien</a>
+      <a href="http://www.frauennotruf.wien.at/" class="klink" target="_blank" rel="noopener">Frauennotruf Wien — 01/71 719</a>
+      <a href="http://rataufdraht.orf.at/" class="klink" target="_blank" rel="noopener">Rat auf Draht — 147</a>
+      <a href="http://www.die-moewe.at/" class="klink" target="_blank" rel="noopener">Die Möwe — Kinderschutzzentrum</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="footer-top">
+    <div>
+      <p class="footer-logo">Therapie Hoyos</p>
+      <p class="footer-tagline">Erlauben Sie sich, Ihr Leben selbst zu steuern.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#ueber-mich">Über mich</a></li>
+        <li><a href="#leistungen">Leistungen</a></li>
+        <li><a href="#methode">Methode</a></li>
+        <li><a href="#ablauf">Ablauf</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Kontakt</h4>
+      <ul>
+        <li><a href="tel:+436645452637">+43 664 545 2637</a></li>
+        <li><a href="mailto:kontakt@therapiehoyos.at">kontakt@therapiehoyos.at</a></li>
+        <li><a href="#maps">Neubaugasse 76/3/21, 1070 Wien</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; 2024 Mag. Elisabeth Hoyos &middot; Systemische Familientherapeutin</p>
+    <div class="footer-legal">
+      <button onclick="openModal('impressum')">Impressum</button>
+      <button onclick="openModal('datenschutz')">Datenschutz</button>
+    </div>
+  </div>
+</footer>
+
+<!-- IMPRESSUM MODAL -->
+<div class="modal-bg" id="impBg" onclick="closeModal('impressum')"></div>
+<div class="modal" id="impModal" role="dialog" aria-modal="true">
+  <button class="modal-x" onclick="closeModal('impressum')" aria-label="Schließen">&times;</button>
+  <h2>Impressum</h2>
+  <p><strong>Mag. Elisabeth Hoyos</strong><br>Systemische Familientherapeutin<br>Neubaugasse 76/3/21, 1070 Wien</p>
+  <p><strong>Kontakt:</strong><br>Tel: +43 664 545 2637<br>E-Mail: kontakt@therapiehoyos.at</p>
+  <p><strong>Berufsrecht:</strong><br>Eingetragen in der Psychotherapeutenliste des Bundesministeriums für Gesundheit.<br>Berufsrecht: Psychotherapiegesetz BGBl 1990/361<br>Aufsichtsbehörde: Bundesministerium für Gesundheit</p>
+</div>
+
+<!-- DATENSCHUTZ MODAL -->
+<div class="modal-bg" id="dsgBg" onclick="closeModal('datenschutz')"></div>
+<div class="modal" id="dsgModal" role="dialog" aria-modal="true">
+  <button class="modal-x" onclick="closeModal('datenschutz')" aria-label="Schließen">&times;</button>
+  <h2>Datenschutz</h2>
+  <p><strong>Verantwortliche:</strong> Mag. Elisabeth Hoyos, Neubaugasse 76/3/21, 1070 Wien<br>Kontakt: kontakt@therapiehoyos.at</p>
+  <p>Daten werden ausschließlich zur Terminvereinbarung und therapeutischen Begleitung verarbeitet. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
+  <p>Daten werden nicht an Dritte weitergegeben. Absolute Verschwiegenheitspflicht gem. § 15 Psychotherapiegesetz.</p>
+  <p><strong>Betroffenenrechte:</strong> Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch jederzeit möglich via kontakt@therapiehoyos.at.</p>
+  <p>Beschwerderecht bei der Datenschutzbehörde (<a href="https://www.dsb.gv.at" style="color:var(--accent)" target="_blank" rel="noopener">dsb.gv.at</a>).</p>
+</div>
+
+<!-- COOKIE BANNER -->
+<div id="cookie">
+  <p>Diese Website verwendet keine Tracking-Cookies. Notwendige Einstellungen werden lokal gespeichert. <button onclick="openModal('datenschutz')" style="color:var(--accent);text-decoration:underline;background:none;border:none;font-size:inherit;cursor:pointer;font-family:inherit">Datenschutz</button></p>
+  <button class="cookie-ok" id="cookieOk">Verstanden</button>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* Device */
+  const isDesktop = window.matchMedia('(pointer:fine)').matches;
+  if(!isDesktop) document.body.classList.add('is-mobile');
+
+  /* Lenis */
+  let lenis = null;
+  if(isDesktop && typeof Lenis !== 'undefined'){
+    lenis = new Lenis({
+      duration: 1.4,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true
+    });
+    (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(0);
+  }
+
+  const getScroll = () => lenis ? lenis.scroll : window.scrollY;
+
+  /* Film Grain */
+  const turb = document.getElementById('turb');
+  let gSeed = 0;
+  (function grain(){ turb.setAttribute('seed', gSeed++ % 999); requestAnimationFrame(grain); })();
+
+  /* Intro */
+  const intro = document.getElementById('intro');
+  const iLogo = document.getElementById('intro-logo');
+  setTimeout(() => iLogo.classList.add('show'), 120);
+  setTimeout(() => {
+    intro.classList.add('gone');
+    document.querySelector('.hero-eyebrow').classList.add('show');
+    document.querySelector('.hero-sub').classList.add('show');
+    initSplit();
+  }, 1850);
+
+  /* Split Text */
+  function initSplit(){
+    document.querySelectorAll('.split-line').forEach(line => {
+      const txt = line.dataset.text || line.textContent;
+      line.innerHTML = txt.split('').map((c, i) =>
+        c === ' '
+          ? '<span class="sc" style="display:inline;transition-delay:' + (i * 20) + 'ms"> </span>'
+          : '<span class="sc" style="transition-delay:' + (i * 20) + 'ms">' + c + '</span>'
+      ).join('');
+      requestAnimationFrame(() => line.querySelectorAll('.sc').forEach(s => s.classList.add('on')));
+    });
+  }
+
+  /* Custom Cursor */
+  if(isDesktop){
+    const dot = document.getElementById('cdot');
+    const ring = document.getElementById('cring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    (function cursor(){
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      dot.style.cssText = 'left:' + mx + 'px;top:' + my + 'px';
+      ring.style.cssText = 'left:' + rx + 'px;top:' + ry + 'px';
+      requestAnimationFrame(cursor);
+    })();
+    document.querySelectorAll('a, button, .acc-trigger, .magnetic, .klink').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hov'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hov'));
+    });
+  }
+
+  /* Scroll dispatcher */
+  const handlers = [];
+  const onScroll = fn => handlers.push(fn);
+  if(lenis){
+    lenis.on('scroll', () => handlers.forEach(fn => fn()));
+  } else {
+    window.addEventListener('scroll', () => handlers.forEach(fn => fn()), { passive: true });
+  }
+
+  /* Progress bar */
+  const bar = document.getElementById('progress');
+  onScroll(() => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (getScroll() / max * 100) + '%';
+  });
+
+  /* Nav */
+  const nav = document.getElementById('nav');
+  const navAs = document.querySelectorAll('.nav-links a');
+  const allSections = document.querySelectorAll('section[id], #marquee, #maps, #krisenlinks');
+  onScroll(() => {
+    nav.classList.toggle('scrolled', getScroll() > 80);
+    let cur = '';
+    allSections.forEach(s => { if(getScroll() >= s.offsetTop - 220) cur = s.id; });
+    navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+  });
+
+  /* BG interpolation */
+  const bgEls = document.querySelectorAll('[data-bg]');
+  onScroll(() => {
+    let active = null;
+    bgEls.forEach(el => { if(el.getBoundingClientRect().top <= window.innerHeight * 0.5) active = el; });
+    if(active) document.body.style.background = active.dataset.bg;
+  });
+
+  /* Hamburger */
+  const ham = document.getElementById('hamburger');
+  const mmenu = document.getElementById('mmenu');
+  const closeMenu = () => { ham.classList.remove('open'); mmenu.classList.remove('open'); };
+  ham.addEventListener('click', () => { ham.classList.toggle('open'); mmenu.classList.toggle('open'); });
+  mmenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  /* Parallax — Hero + Quote */
+  const heroBg = document.getElementById('heroBg');
+  const quoteBg = document.getElementById('quoteBg');
+  const quoteSection = document.getElementById('quote');
+  onScroll(() => {
+    const s = getScroll();
+    if(heroBg) heroBg.style.transform = 'translateY(' + (s * 0.32) + 'px)';
+    if(quoteBg && quoteSection){
+      const off = (window.innerHeight - quoteSection.getBoundingClientRect().top) * 0.14;
+      quoteBg.style.transform = 'translateY(' + off + 'px)';
+    }
+  });
+
+  /* Sticky Story — 400vh, 4 phases */
+  const storySection = document.getElementById('ueber-mich');
+  const sphs = document.querySelectorAll('.sph');
+  const sdots = document.querySelectorAll('.story-dot');
+  onScroll(() => {
+    if(!storySection) return;
+    const top = storySection.offsetTop;
+    const t = Math.max(0, Math.min(1, (getScroll() - top) / (storySection.offsetHeight - window.innerHeight)));
+    const idx = Math.min(3, Math.floor(t * 4));
+    sphs.forEach((p, i) => p.classList.toggle('on', i === idx));
+    sdots.forEach((d, i) => d.classList.toggle('on', i === idx));
+  });
+
+  /* Horizontal Reel — 600vh, 5 panels */
+  const reelSection = document.getElementById('reel');
+  const reelTrack = document.getElementById('reelTrack');
+  const rdots = document.querySelectorAll('.rdot');
+  const PANELS = 5;
+  onScroll(() => {
+    if(!reelSection) return;
+    const start = reelSection.offsetTop;
+    const scrollable = reelSection.offsetHeight - window.innerHeight;
+    const t = Math.max(0, Math.min(1, (getScroll() - start) / scrollable));
+    reelTrack.style.transform = 'translateX(-' + (t * (PANELS - 1) * 100) + 'vw)';
+    const pi = Math.min(PANELS - 1, Math.floor(t * PANELS));
+    rdots.forEach((d, i) => d.classList.toggle('on', i === pi));
+  });
+
+  /* Counter Animation */
+  let countered = false;
+  new IntersectionObserver(entries => {
+    if(!entries[0].isIntersecting || countered) return;
+    countered = true;
+    document.querySelectorAll('.stat-num').forEach(el => {
+      const target = +el.dataset.target;
+      const suffix = el.dataset.suffix || '';
+      const t0 = performance.now();
+      const dur = 1800;
+      (function step(now){
+        const p = Math.min((now - t0) / dur, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.floor(ease * target) + suffix;
+        if(p < 1) requestAnimationFrame(step);
+      })(t0);
+    });
+  }, { threshold: 0.3 }).observe(document.getElementById('stats'));
+
+  /* 3D Card Tilt */
+  if(isDesktop){
+    document.querySelectorAll('.tilt-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = 'perspective(800px) rotateY(' + (x * 18) + 'deg) rotateX(' + (-y * 18) + 'deg) scale(1.025)';
+        card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+        card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+  }
+
+  /* Magnetic Buttons */
+  if(isDesktop){
+    document.querySelectorAll('.magnetic').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2);
+        const dy = e.clientY - (r.top + r.height / 2);
+        if(Math.sqrt(dx*dx + dy*dy) < 80){
+          btn.style.transform = 'translate(' + (dx * 0.35) + 'px,' + (dy * 0.35) + 'px)';
+        }
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transition = 'transform 0.6s cubic-bezier(0.34,1.56,0.64,1)';
+        btn.style.transform = '';
+        setTimeout(() => btn.style.transition = '', 620);
+      });
+    });
+  }
+
+  /* Clip-Path Reveal */
+  const clipObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.clip-reveal').forEach(el => clipObs.observe(el));
+
+  /* Steps Stagger */
+  const stepsEl = document.querySelector('.steps');
+  if(stepsEl){
+    new IntersectionObserver(entries => {
+      if(!entries[0].isIntersecting) return;
+      entries[0].target.querySelectorAll('.step').forEach((s, i) =>
+        setTimeout(() => s.classList.add('on'), i * 180)
+      );
+    }, { threshold: 0.2 }).observe(stepsEl);
+  }
+
+  /* Scroll Text Highlight */
+  const hlEl = document.getElementById('highlightText');
+  if(hlEl){
+    const words = hlEl.textContent.trim().split(/\s+/);
+    hlEl.innerHTML = words.map(w => '<span class="hw">' + w + '</span>').join(' ');
+    const hws = hlEl.querySelectorAll('.hw');
+    onScroll(() => {
+      const rect = hlEl.getBoundingClientRect();
+      const vH = window.innerHeight;
+      hws.forEach((hw, i) => {
+        const progress = 1 - (rect.top - vH * 0.45 + (i / hws.length) * rect.height) / vH;
+        hw.classList.toggle('on', progress > 0.25);
+      });
+    });
+  }
+
+  /* Scale-from-small CTA */
+  const ctaEl = document.querySelector('.cta-btn');
+  onScroll(() => {
+    if(!ctaEl) return;
+    const t = Math.min(1, getScroll() / 200);
+    ctaEl.style.transform = 'scale(' + (0.8 + t * 0.2) + ')';
+    ctaEl.style.opacity = 0.6 + t * 0.4;
+  });
+
+  /* Accordion */
+  document.querySelectorAll('.acc-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.acc-item');
+      const body = item.querySelector('.acc-body');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.acc-item.open').forEach(open => {
+        open.classList.remove('open');
+        open.querySelector('.acc-body').style.maxHeight = '0';
+      });
+      if(!wasOpen){
+        item.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      }
+    });
+  });
+
+  /* Smooth anchor scroll */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if(!target) return;
+      e.preventDefault();
+      if(lenis) lenis.scrollTo(target, { offset: -80 });
+      else target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  /* Modals */
+  function openModal(id){
+    const bg = document.getElementById(id === 'impressum' ? 'impBg' : 'dsgBg');
+    const modal = document.getElementById(id === 'impressum' ? 'impModal' : 'dsgModal');
+    bg.classList.add('open');
+    modal.classList.add('open');
+    if(lenis) lenis.stop();
+  }
+  function closeModal(id){
+    const bg = document.getElementById(id === 'impressum' ? 'impBg' : 'dsgBg');
+    const modal = document.getElementById(id === 'impressum' ? 'impModal' : 'dsgModal');
+    bg.classList.remove('open');
+    modal.classList.remove('open');
+    if(lenis) lenis.start();
+  }
+  window.openModal = openModal;
+  window.closeModal = closeModal;
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape'){ closeModal('impressum'); closeModal('datenschutz'); }
+  });
+
+  /* Cookie */
+  const cookieBanner = document.getElementById('cookie');
+  if(!localStorage.getItem('th_cookie')){
+    setTimeout(() => cookieBanner.classList.add('show'), 2900);
+  }
+  document.getElementById('cookieOk').addEventListener('click', () => {
+    localStorage.setItem('th_cookie', '1');
+    cookieBanner.classList.remove('show');
+  });
+
+  /* Contact → mailto */
+  document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('fname').value;
+    const email = document.getElementById('femail').value;
+    const msg = document.getElementById('fmsg').value;
+    const sub = encodeURIComponent('Anfrage von ' + name);
+    const body = encodeURIComponent('Name: ' + name + '\nE-Mail: ' + email + '\n\n' + msg);
+    window.location.href = 'mailto:kontakt@therapiehoyos.at?subject=' + sub + '&body=' + body;
+  });
+
+})();
+</script>
+</body>
+</html>
